@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose  = require('mongoose')
 const dotenv = require('dotenv').config()
+const postRoute = require('./routes/postRoute')
 
 const app = express()
 
@@ -13,6 +14,10 @@ PORT = process.env.PORT
 app.get('/',(req , res , next)=> {
     res.send("servering is running");
 })
+
+// Routes middleware 
+
+app.use("/api/posts", postRoute)
 
 
 
