@@ -10,7 +10,7 @@ const postSchema = mongoose.Schema({
     image: {
         type: String,
         trim: true,
-        default: "default_image_url_here" 
+        required : true
     }
 }, {
     timestamps: true 
