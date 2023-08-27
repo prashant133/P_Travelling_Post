@@ -13,6 +13,12 @@ const createPost = asyncHandler(async (req, res, next) => {
             return res.status(400).json({ message: 'Please upload a valid image file (JPEG, JPG, PNG).' });
         }
 
+        if(description.length > 500) {
+            res.status(400).json({message : "Not more than 500"})
+
+        }
+        
+
         const newPost = new Post({
             description: description,
             image: req.file.path
