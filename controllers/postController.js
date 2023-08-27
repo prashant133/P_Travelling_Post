@@ -1,6 +1,9 @@
 const asyncHandler = require('express-async-handler');
 const Post = require('../models/postModel');
+const mongoose = require('mongoose')
 
+
+// create a post
 const createPost = asyncHandler(async (req, res, next) => {
     try {
         const { description } = req.body;
@@ -23,4 +26,33 @@ const createPost = asyncHandler(async (req, res, next) => {
     }
 });
 
-module.exports = createPost;
+// to get all the post 
+
+const getAllPost = asyncHandler(async(req ,res , next)=>{
+    res.send("get all post")
+
+})
+
+
+// get post from post id
+
+
+const getPost = asyncHandler(async (req, res, next) => {
+    const postId = req.params.id;
+
+    if (!mongoose.isValidObjectId(postId)) {
+        return res.status(400).json({ message: "Invalid post ID " });
+    }
+
+    try {
+        const post = await Post.findById(postId);
+
+      
+        res.status(200).json(post);
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+
+module.exports = {createPost, getAllPost, getPost}
