@@ -1,7 +1,12 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
+const authMiddleware = require('../middleware/authoriztion')
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv').config()
 
+
+// registration of the user
 const registerUser = asyncHandler(async (req, res, next) => {
     const { username, password, email } = req.body;
 
@@ -53,4 +58,40 @@ const registerUser = asyncHandler(async (req, res, next) => {
     }
 });
 
-module.exports = registerUser;
+// login of the user 
+const loginUser = async (req, res, next) => {
+    const { username, password } = req.body;
+
+    try {
+        if (!username || !password) {
+            return res.status(400).json({ message: "Please provide credentials" });
+        }
+
+        // Check if the user exists
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(400).json({ message: "Wrong credentials" });
+        }
+
+        // Compare the password with hashed password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+
+        if (!isValidPassword) {
+            return res.status(400).json({ message: "Wrong credentials" });
+        }
+
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.SECRET_KEY, {
+            expiresIn: '1h'
+        });
+
+        return res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
+
+
+
+module.exports = {registerUser, loginUser}
