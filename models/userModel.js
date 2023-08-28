@@ -22,7 +22,12 @@ const userSchema = mongoose.Schema({
         minLength : [6,"Password must be upto 6 characters"],
     },
 
-    is_admim : {
-        type :Boolean
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
     }
 })
+
+const User = mongoose.model("User", userSchema);
+module.exports = User ;

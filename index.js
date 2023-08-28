@@ -3,6 +3,7 @@ const mongoose  = require('mongoose')
 const cors = require('cors');
 const dotenv = require('dotenv').config()
 const postRoute = require('./routes/postRoute')
+const userRoute = require('./routes/userRoute')
 const path = require('path')
 
 const app = express()
@@ -25,7 +26,8 @@ app.get('/',(req , res , next)=> {
 
 // Routes middleware 
 
-app.use("/api/posts", postRoute)
+app.use("/api/posts/", postRoute)
+app.use("/api/user/", userRoute )
 
 
 

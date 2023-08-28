@@ -5,7 +5,7 @@ const postSchema = mongoose.Schema({
     description: {
         type: String,
         trim: true,
-        maxlength : [10, "description must not exceed more than 10 character"]
+        maxlength : [500, "description must not exceed more than 10 character"]
     },
     image: {
         type: String,
