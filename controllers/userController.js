@@ -58,11 +58,12 @@ const registerUser = asyncHandler(async (req, res, next) => {
     }
 });
 
-// login of the user 
+// login of the user or admin
 const loginUser = async (req, res, next) => {
     const { username, password } = req.body;
 
     try {
+        // Validation
         if (!username || !password) {
             return res.status(400).json({ message: "Please provide credentials" });
         }
@@ -80,15 +81,28 @@ const loginUser = async (req, res, next) => {
             return res.status(400).json({ message: "Wrong credentials" });
         }
 
+        // Depending on the user's role, you can set up different responses
+        let roleMessage = "";
+        if (user.role === "admin") {
+            roleMessage = "Admin login successful";
+        } else {
+            roleMessage = "User login successful";
+        }
+
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.SECRET_KEY, {
             expiresIn: '1h'
         });
 
-        return res.status(200).json({ message: "Login successful", token });
+        return res.status(200).json({ message: roleMessage, token });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
 };
+
+
+
+
+
 
 
 

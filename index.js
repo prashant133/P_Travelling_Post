@@ -4,6 +4,9 @@ const cors = require('cors');
 const dotenv = require('dotenv').config()
 const postRoute = require('./routes/postRoute')
 const userRoute = require('./routes/userRoute')
+const adminRoute = require('./routes/adminRoute')
+
+
 const path = require('path')
 
 const app = express()
@@ -28,6 +31,14 @@ app.get('/',(req , res , next)=> {
 
 app.use("/api/posts/", postRoute)
 app.use("/api/user/", userRoute )
+
+// admin routes middleware
+app.use("/api/admin/",adminRoute)
+
+
+
+
+
 
 
 

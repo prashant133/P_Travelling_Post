@@ -3,7 +3,7 @@ const User = require('../models/userModel');
 const dotenv = require('dotenv').config()
 
 // Middleware function to check if the user is authenticated
-const authMiddleware = async (req, res, next) => {
+const verifyUser = async (req, res, next) => {
     try {
         // Get the JWT token from the request headers
         const token = req.headers.authorization.split(' ')[1]; 
@@ -26,4 +26,15 @@ const authMiddleware = async (req, res, next) => {
     }
 };
 
-module.exports = authMiddleware;
+
+const verifyAdmin =  async(req , res , next) => {
+    if(req.user && req.user.role === "admin"){
+
+        next();
+    }else {
+        return res.status(400).json({message : "Access denied , You are not admin"})
+    }
+
+}
+
+module.exports = {verifyUser, verifyAdmin};
